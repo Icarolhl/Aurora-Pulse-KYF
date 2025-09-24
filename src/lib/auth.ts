@@ -1,7 +1,32 @@
 import GoogleProvider from 'next-auth/providers/google'
 import DiscordProvider from 'next-auth/providers/discord'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { type NextAuthOptions } from 'next-auth'
+import { type NextAuthOptions, type Session } from 'next-auth'
+import type { JWT } from 'next-auth/jwt'
+
+type DiscordGuild = {
+  name: string
+}
+
+const isDiscordGuild = (value: unknown): value is DiscordGuild => {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as { name?: unknown }).name === 'string'
+  )
+}
+
+type TokenWithExtras = JWT & {
+  guilds?: string[]
+  role?: string
+}
+
+type SessionWithExtras = Session & {
+  user: (Session['user'] & {
+    guilds?: string[]
+    isAdmin?: boolean
+  }) | undefined
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -31,7 +56,7 @@ export const authOptions: NextAuthOptions = {
           return {
             id: 'admin',
             name: 'Administrador',
-            email: 'admin@furia.gg',
+            email: 'admin@aurorapulse.gg',
             role: 'admin',
           }
         }
@@ -42,7 +67,9 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, account, profile, user }) {
+    async jwt({ token, account, user }) {
+      const tokenWithExtras = token as TokenWithExtras
+
       if (account?.provider === 'discord' && account.access_token) {
         try {
           const res = await fetch('https://discord.com/api/users/@me/guilds', {
@@ -50,34 +77,42 @@ export const authOptions: NextAuthOptions = {
               Authorization: `Bearer ${account.access_token}`,
             },
           })
-          const guilds = await res.json()
-          token.guilds = guilds.map((g: any) => g.name)
+          const rawGuilds = await res.json()
+          const guildNames = Array.isArray(rawGuilds)
+            ? rawGuilds.filter(isDiscordGuild).map(guild => guild.name)
+            : []
+
+          tokenWithExtras.guilds = guildNames
         } catch (err) {
           console.error('Erro ao buscar guilds do Discord:', err)
         }
       }
 
-      if (user?.role === 'admin') {
-        token.role = 'admin'
+      if ((user as { role?: string } | undefined)?.role === 'admin') {
+        tokenWithExtras.role = 'admin'
       }
 
-      return token
+      return tokenWithExtras
     },
 
     async session({ session, token }) {
-      if (token.guilds) {
-        ;(session.user as any).guilds = token.guilds
+      const sessionWithExtras = session as SessionWithExtras
+      const tokenWithExtras = token as TokenWithExtras
+
+      if (sessionWithExtras.user && tokenWithExtras.guilds) {
+        sessionWithExtras.user.guilds = tokenWithExtras.guilds
       }
 
       const allowedAdmins = (process.env.ADMIN_EMAILS || '')
         .split(',')
         .map(email => email.trim().toLowerCase())
 
-      session.user.isAdmin = allowedAdmins.includes(
-        (session.user.email || '').toLowerCase()
-      )
+      if (sessionWithExtras.user) {
+        const email = (sessionWithExtras.user.email || '').toLowerCase()
+        sessionWithExtras.user.isAdmin = allowedAdmins.includes(email)
+      }
 
-      return session
+      return sessionWithExtras
     },
   },
 }

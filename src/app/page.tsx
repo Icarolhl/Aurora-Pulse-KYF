@@ -25,8 +25,8 @@ export default function LandingPage() {
     >
       <div className="mb-10">
         <Image
-          src="/avatar-furia.png"
-          alt="Logo FURIA"
+          src="/aurora-pulse-logo.svg"
+          alt="Logo Aurora Pulse"
           width={128}
           height={128}
           className="rounded-full shadow-lg transition-transform duration-300
@@ -40,7 +40,7 @@ export default function LandingPage() {
       </h1>
 
       <p className="text-zinc-300 max-w-xl text-lg leading-relaxed mb-8">
-        Plataforma oficial da FURIA para entender fãs por meio de inteligência
+        Plataforma oficial da Aurora Pulse para entender fãs por meio de inteligência
         artificial, OCR e autenticação social.
       </p>
 
@@ -58,7 +58,7 @@ export default function LandingPage() {
         </motion.a>
 
         <motion.a
-          href="https://github.com/Icarolhl/Furia-KYF"
+          href="https://github.com/Icarolhl/Aurora-Pulse-KYF"
           target="_blank"
           rel="noopener noreferrer"
           whileHover={{ scale: 1.05 }}

@@ -28,7 +28,7 @@ export default function StepDocumentUpload() {
     resetField('documentText')
 
     if (inputRef.current) inputRef.current.value = ''
-  }, [])
+  }, [resetField, setValue])
 
   const handleUpload = async (file: File) => {
     if (!file) return

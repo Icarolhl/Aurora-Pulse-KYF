@@ -1,10 +1,9 @@
-# FURIA KYF — Know Your Fan Platform
+# Aurora Pulse KYF — Know Your Fan Platform
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/seu-usuario/furia-kyf/actions)
-[![Coverage](https://img.shields.io/badge/coverage-95%25-blue)](https://github.com/seu-usuario/furia-kyf/actions)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/seu-usuario/aurora-pulse-kyf/actions)
+[![Coverage](https://img.shields.io/badge/coverage-95%25-blue)](https://github.com/seu-usuario/aurora-pulse-kyf/actions)
 
-**FURIA KYF** é um protótipo de *Know Your Fan*, desenvolvido como desafio técnico para a vaga de Assistente de
-Engenharia de Software.
+**Aurora Pulse KYF** é um protótipo de *Know Your Fan*, desenvolvido com o proposito de estudo.
 
 ---
 
@@ -161,8 +160,8 @@ decisões rápidas sobre engajamento e afinidade de conteúdo.
 
 1. **Clone o repositório**
 ```bash
-git clone https://github.com/Icarolhl/furia-kyf.git
-cd furia-kyf
+git clone https://github.com/Icarolhl/aurora-pulse-kyf.git
+cd aurora-pulse-kyf
 ```
 2. **Instale dependências**
 ```bash
@@ -201,13 +200,11 @@ Acesse em: http://localhost:3000
 
 ## 📌 Observações
 
-> Este projeto é público para avaliação técnica e não se destina à produção.
+> Este projeto foi feito para o aprendizado e não se destina à produção.
 
 > Substitua todas as credenciais antes do uso em ambiente real.
 
-> Este projeto foi desenvolvido como parte de um desafio técnico para a equipe **FURIA Esports**.
-
-> Todos os direitos sobre a marca FURIA são reservados à organização.
+> A marca Aurora Pulse é fictícia e existe apenas para fins de demonstração.
 
 
 ---

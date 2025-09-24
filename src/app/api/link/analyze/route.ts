@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     const { fanId, url } = bodySchema.parse(await req.json())
 
     const { data: fan, error: fanError } = await supabase
-      .from("fans")
+      .from<Fan>("fans")
       .select("*")
       .eq("id", fanId)
       .single()

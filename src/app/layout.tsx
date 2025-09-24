@@ -5,7 +5,7 @@ import { Providers } from "./providers"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "FURIA KYF",
+  title: "Aurora Pulse KYF",
   description: "Conheça seus fãs",
   icons: {
     icon: "/favicon.ico"

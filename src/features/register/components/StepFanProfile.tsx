@@ -59,7 +59,7 @@ export default function StepFanProfile() {
           onChange={(tags: string[]) =>
             setValue("compras_relacionadas", tags)
           }
-          placeholder="Ex: camisa FURIA, ingresso GC..."
+          placeholder="Ex: camisa Aurora Pulse, ingresso GC..."
           className={inputClass}
         />
       </div>
