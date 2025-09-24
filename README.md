@@ -1,221 +1,149 @@
-﻿# Aurora Pulse KYF — Know Your Fan Platform
+﻿# Aurora Pulse KYF - Know Your Fan Platform
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/seu-usuario/aurora-pulse-kyf/actions)
 [![Coverage](https://img.shields.io/badge/coverage-95%25-blue)](https://github.com/seu-usuario/aurora-pulse-kyf/actions)
 
-**Aurora Pulse KYF** é um protótipo de *Know Your Fan*, desenvolvido como desafio técnico para a vaga de Assistente de
-Engenharia de Software.
+Aurora Pulse KYF e um prototipo educacional de plataforma Know Your Fan. O projeto coleta dados estruturados dos fas, valida documentos com OCR e oferece um painel administrativo protegido para analise de engajamento.
 
 ---
 
-## 🚀 Propósito
+## Visao geral
 
-Conheça seus fãs de maneira segura e inteligente, combinando registro guiado
-com análise automatizada.
-
-- Coleta de dados via formulários multietapas
-- Upload e validação de documentos (OCR)
-- Classificação de links externos com IA
-- Consulta de informações em painel administrativo restrito
+- Formulario guiado em tres etapas para cadastro de fas
+- Upload de documento com OCR (Tesseract.js) e verificacao de CPF
+- Analise de links externos com modelo de linguagem via OpenRouter
+- Dashboard administrativo com filtros, detalhamento e integracao com Discord
 
 ---
 
-## 🛠 Tecnologias
+## Stack principal
 
-- **Next.js v13.4.4** (App Router)
-- **React v18.2.0**
-- **TypeScript v5.1.6**
-- **TailwindCSS v3.2**
-- **Framer Motion v10** (animações)
-- **Supabase JS v2** (banco de dados e autenticação)
-- **NextAuth.js v4** (login social)
-- **React Hook Form v7** (validação de formulários)
-
----
-
-## 🧱 Estrutura do Projeto
-
-```
-src/
-├── app/
-│   ├── layout.tsx                 # Layout global da aplicação
-│   ├── page.tsx                   # Página inicial
-│   ├── connect/
-│   │   └── page.tsx               # Login via Discord/Google
-│   ├── register/
-│   │   └── page.tsx               # Registro multietapas
-│   ├── admin/
-│   │   ├── page.tsx               # Dashboard de admin
-│   │   └── fan/
-│   │       └── [id]/
-│   │           └── page.tsx       # Detalhes individuais do fã
-│   └── api/
-│       ├── admin/
-│       │   └── fans/
-│       │       └── route.ts       # Retorna lista de fãs para admin
-│       ├── link/
-│       │   └── analyze/
-│       │       └── route.ts       # Endpoint de análise de links
-│       ├── register/
-│       │   └── route.ts           # Endpoint de registro de fã
-│       └── social/
-│           └── guilds/
-│               └── route.ts       # Retorna guilds do Discord do usuário
-├── components/
-│   └── ui/
-│       ├── StatusPopup.tsx        # Popups de feedback
-│       ├── StyledSelect.tsx       # Select estilizado
-│       └── Toast.tsx              # Toasts globais
-├── context/
-│   └── ToastContext.tsx           # Provedor de toasts (context API)
-├── features/
-│   ├── admin/
-│   │   └── components/
-│   │       └── FanLinkAnalyzer.tsx # Componente de análise de link
-│   └── register/
-│       └── components/
-│           ├── StepPersonal.tsx    # Etapa 1: dados pessoais
-│           ├── StepFanProfile.tsx  # Etapa 2: perfil de fã
-│           └── StepDocumentUpload.tsx # Etapa 3: envio de documento
-├── hooks/
-│   └── useIsAdmin.ts              # Hook para verificar se usuário é admin
-├── lib/
-│   ├── ai.ts                      # Função que chama a IA para classificar relevância
-│   └── auth.ts                    # Configuração do NextAuth
-├── styles/
-│   └── globals.css                # Estilo global da aplicação
-public/
-└── favicon.ico                    # Favicon da aplicação
-
-```
+- Next.js 15 (App Router)
+- React 18 + TypeScript 5
+- Tailwind CSS 4 + Framer Motion
+- NextAuth.js 4 (Google, Discord e credenciais de admin)
+- Supabase (persistencia e service role)
+- React Hook Form + Zod
+- Tesseract.js (OCR no browser)
+- OpenRouter / GPT-3.5 (classificacao de relevancia)
 
 ---
 
-## 📝 Funcionalidades
+## Arquitetura em alto nivel
 
-- **Formulário multietapas:**
-  1. Dados pessoais (nome, CPF, localização, endereço)
-  2. Perfil de fã (interesses, atividades, histórico)
-  3. Validação de documento (upload + OCR)
-- **Análise de Links:** IA retorna score de 0–100 conforme relevância
-- **Dashboard Admin:** lista de fãs, filtro por detalhes e navegação
-- **Autorização:** acesso restrito a e-mails definidos em `.env`
-
----
-
-## 🔐 Fluxos de Usuário
-
-- **Fã:**
-  1. Login social (Discord/Google)
-  2. Registro em três etapas
-  3. Redirecionado para home
-- **Admin:**
-  1. Login social + validação de e-mail
-  2. Acessa `/admin` para gerenciar fãs
-
----
-
-🔄 Análise de Relevância de Links
-
-A aplicação utiliza o modelo GPT-3.5 Turbo para avaliar automaticamente a
-relevância de páginas externas (como perfis de Steam, GamersClub, etc.) com base
-nas informações armazenadas no perfil do fã (interesses, atividades e histórico).
-
-Cada link analisado recebe uma pontuação de 0 a 100, de acordo com o grau de
-aderência ao perfil do usuário:
-
-🔴 0–29 — Irrelevante
-
-🟠 30–59 — Pouco relacionado
-
-🟡 60–84 — Relevante
-
-🟢 85–100 — Muito relevante
-
-Essa análise é exibida visualmente na interface de administração, facilitando
-decisões rápidas sobre engajamento e afinidade de conteúdo.
+- `src/app`
+  - `layout.tsx` — layout global
+  - `page.tsx` — landing page
+  - `connect/page.tsx` — fluxo de login social
+  - `register/page.tsx` — wizard de registro em tres etapas
+  - `admin/page.tsx` — dashboard administrativo (SSR)
+  - `admin/fan/[id]/page.tsx` — perfil detalhado do fa
+  - `api/register/route.ts` — registro autenticado de fas
+  - `api/link/analyze/route.ts` — analise de links (somente admin)
+  - `api/social/guilds/route.ts` — dados de guilds do Discord
+  - `api/admin/fans/route.ts` — lista de fas (somente admin)
+  - `api/admin/fan/[id]/route.ts` — detalhe individual (somente admin)
+- `src/components` — UI compartilhada (StatusPopup, StyledSelect, etc.)
+- `src/context/ToastContext.tsx` — provider de toasts
+- `src/features` — modulos de negocio (register, admin)
+- `src/hooks/useIsAdmin.ts` — helper que usa session.user.isAdmin
+- `src/lib` — auth, helpers de admin, logging e integracao com IA
+- `public/aurora-pulse-logo.svg` — logo utilizado na landing page
 
 ---
 
-## 🧬 Tabela `fans` (Supabase)
+## Fluxos resumidos
 
-| Campo                 | Tipo     |
-|----------------------|----------|
-| id                   | uuid     |
-| nome                 | text     |
-| email                | text     |
-| cpf                  | text     |
-| endereco             | text     |
-| estado               | text     |
-| cidade               | text     |
-| interesses           | text[]   |
-| atividades           | text[]   |
-| eventos_participados | text[]   |
-| compras_relacionadas | text[]   |
-| guilds_discord       | text[]   |
-| created_at           | timestamp|
+**Fa**
+1. Acessa `/connect` e autentica via Google ou Discord.
+2. Preenche o formulario (dados pessoais, perfil, documento).
+3. Confirma o envio e retorna para a home.
+
+**Admin**
+1. Faz login com e-mail autorizado.
+2. Acessa `/admin` para listar fas.
+3. Abre `/admin/fan/[id]` para dados completos e analise de links.
+
+Todos os endpoints api/admin/* e api/link/analyze validam a sessao usando `requireAdminSession`, evitando exposicao indevida da service role do Supabase.
 
 ---
 
-## ⚙️ Instalação e Configuração
+## Configuracao e uso
 
-1. **Clone o repositório**
-```bash
-git clone https://github.com/Icarolhl/aurora-pulse-kyf.git
-cd aurora-pulse-kyf
-```
-2. **Instale dependências**
-```bash
-npm install
-```
-3. **Configurar variáveis de ambiente**
-   - **Google OAuth**: crie projeto em [Google Cloud Console](https://console.cloud.google.com), ative OAuth2 e obtenha CLIENT_ID e SECRET
-   - **Discord OAuth**: registre sua aplicação em [Discord Developer Portal](https://discord.com/developers), copie CLIENT_ID e SECRET
-   - **Supabase**: crie conta em [Supabase](https://supabase.com), gere URL,ANON_KEY e SERVICE_ROLE_KEY
-   - **OpenRouter**: crie conta em [OpenRouter](https://openrouter.ai), obtenha API_KEY
-   - **NextAuth**: defina NEXTAUTH_SECRET e NEXTAUTH_URL
+1. **Clonar o repositorio**
+   ```bash
+   git clone https://github.com/Icarolhl/aurora-pulse-kyf.git
+   cd aurora-pulse-kyf
+   ```
+2. **Instalar dependencias**
+   ```bash
+   npm install
+   ```
+3. **Criar `.env.local`**
+   ```env
+   NEXTAUTH_SECRET=...
+   NEXTAUTH_URL=http://localhost:3000
 
-4. **Arquivo `.env.local`**
-```env
-NEXTAUTH_SECRET=...
-NEXTAUTH_URL=...
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-DISCORD_CLIENT_ID=...
-DISCORD_CLIENT_SECRET=...
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-SUPABASE_SERVICE_ROLE_KEY=...
-OPENROUTER_API_KEY=...
-NEXT_PUBLIC_ADMIN_EMAILS=exemplo@exemplo.com,exemplo2@exemplo.com
-```
+   GOOGLE_CLIENT_ID=...
+   GOOGLE_CLIENT_SECRET=...
 
-5. **Execute localmente**
-```bash
-npm run dev
-```
+   DISCORD_CLIENT_ID=...
+   DISCORD_CLIENT_SECRET=...
 
-Acesse em: http://localhost:3000
+   NEXT_PUBLIC_SUPABASE_URL=...
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+   SUPABASE_SERVICE_ROLE_KEY=...
+
+   OPENROUTER_API_KEY=...
+
+   ADMIN_EMAILS=admin@example.com,admin2@example.com
+   # NEXT_PUBLIC_ADMIN_EMAILS=admin@example.com (opcional, apenas para UI)
+   ```
+4. **Executar em desenvolvimento**
+   ```bash
+   npm run dev
+   ```
+   Aplicacao disponivel em `http://localhost:3000`.
+
+### Dependencias externas
+- Google OAuth: console Google Cloud -> OAuth 2.0 -> redirect `http://localhost:3000/api/auth/callback/google`.
+- Discord OAuth: https://discord.com/developers -> scopes `identify email guilds`.
+- Supabase: criar tabela `fans` conforme schema abaixo e habilitar storage para documentos.
+- OpenRouter: gerar chave e configurar modelo (gpt-3.5-turbo por padrao).
+
+### Schema sugerido para `fans`
+
+| Campo                 | Tipo      | Observacoes                             |
+| --------------------- | --------- | --------------------------------------- |
+| id                    | uuid      | PK gerado pelo Supabase                 |
+| nome                  | text      |                                         |
+| email                 | text      | Derivado do usuario autenticado         |
+| cpf                   | text      | Armazenado como `000.000.000-00`        |
+| endereco              | text      |                                         |
+| estado                | text      |                                         |
+| cidade                | text      |                                         |
+| interesses            | text[]    | Tags livres                             |
+| atividades            | text[]    |                                         |
+| eventos_participados  | text[]    |                                         |
+| compras_relacionadas  | text[]    |                                         |
+| guilds_discord        | text[]    | Nomes das guilds confirmadas            |
+| created_at            | timestamp | `now()` como default                    |
 
 ---
 
-## 📌 Observações
+## Seguranca e auditoria
 
-> Este projeto é público para avaliação técnica e não se destina à produção.
-
-> Substitua todas as credenciais antes do uso em ambiente real.
-
-> Este projeto foi desenvolvido como parte de um desafio técnico para a equipe **Aurora Pulse Labs**.
-
-> A marca Aurora Pulse é fictícia e existe apenas para fins de demonstração.
-
+- Endpoints administrativos exigem sessao valida + e-mail autorizado (`ADMIN_EMAILS`).
+- `link/analyze` bloqueia hosts internos, aceita apenas HTTPS e aplica timeout para mitigar SSRF.
+- `register` reconcilia o e-mail do corpo com `session.user.email` antes de inserir dados.
+- `log-admin.ts` grava auditoria em `${os.tmpdir()}/aurora-pulse-logs/admin-access.log`; utilize um sink persistente se precisar de historico mais longo.
 
 ---
-o e não se destina à produção.
 
-> Substitua todas as credenciais antes do uso em ambiente real.
+## Avisos
 
-> A marca Aurora Pulse é fictícia e existe apenas para fins de demonstração.
+- Projeto para fins educacionais; revise seguranca, testes e custos antes de usar em producao.
+- Substitua todas as credenciais e chaves de API.
+- Aurora Pulse e uma marca ficticia criada apenas para demonstracao.
 
-
----
+> Este projeto foi desenvolvido como parte de um estudo tecnico da equipe **Aurora Pulse Labs**.
