@@ -31,45 +31,28 @@ Aurora Pulse KYF e um prototipo de plataforma Know Your Fan criado para estudos:
 
 ## Arquitetura em alto nivel
 
-`
+```
 src/
   app/
-    layout.tsx              # Layout global
+    layout.tsx              # Global layout
     page.tsx                # Landing page
-    connect/
-      page.tsx              # Login social
-    register/
-      page.tsx              # Wizard em três etapas
-    admin/
-      page.tsx              # Dashboard administrativo (SSR)
-      fan/
-        [id]/
-          page.tsx          # Perfil detalhado do fã
+    connect/page.tsx        # Login flow
+    register/page.tsx       # Multi-step registration
+    admin/page.tsx          # Admin dashboard (SSR)
+    admin/fan/[id]/page.tsx # Fan detail view
     api/
-      register/route.ts     # Registro autenticado de fãs
-      link/analyze/route.ts # Análise de links (somente admin)
-      social/guilds/route.ts# Guilds carregadas do Discord
-      admin/
-        fans/route.ts       # Lista de fãs (somente admin)
-        fan/[id]/route.ts   # Perfil individual (somente admin)
-  components/
-    ui/
-      StatusPopup.tsx       # Pop-ups de feedback
-      StyledSelect.tsx      # Select estilizado
-  context/
-    ToastContext.tsx        # Provider de toasts
-  features/
-    register/components/    # Etapas do formulário (dados, perfil, documento)
-    admin/components/       # FanLinkAnalyzer e widgets do painel
-  hooks/
-    useIsAdmin.ts           # Hook que usa session.user.isAdmin
-  lib/
-    auth.ts                 # Configuração do NextAuth e enriquecimento de sessão
-    admin-auth.ts           # Helper para exigir sessão de admin
-    admin-emails.ts         # Normaliza lista de e-mails de admin
-    log-admin.ts            # Registro de auditoria (filesystem temporário)
-    ai.ts                   # Chamada ao modelo GPT via OpenRouter
-``
+      register/route.ts     # Fan registration endpoint
+      link/analyze/route.ts # Link relevance analyzer (admin)
+      social/guilds/route.ts# Discord guild metadata
+      admin/fans/route.ts   # Fan list (admin)
+      admin/fan/[id]/route.ts# Fan detail (admin)
+  components/               # Shared UI widgets
+  context/ToastContext.tsx  # Toast provider
+  features/                 # Feature modules (register, admin)
+  hooks/useIsAdmin.ts       # Admin session helper
+  lib/                      # Auth, logging, AI integrations
+```
+
 ---
 
 ## Fluxos principais
