@@ -11,15 +11,10 @@ import Image from 'next/image'
 import { FcGoogle } from 'react-icons/fc'
 import { SiDiscord } from 'react-icons/si'
 
-const ADMIN_EMAILS =
-  process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || []
-
 export default function ConnectPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const isAdmin =
-    session?.user?.email &&
-    ADMIN_EMAILS.includes(session.user.email)
+  const isAdmin = Boolean((session?.user as { isAdmin?: boolean } | undefined)?.isAdmin)
 
   if (status === 'loading') return null
 

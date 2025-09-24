@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server"
 import { supabaseAdmin } from "@/lib/supabase-admin"
+import { requireAdminSession } from "@/lib/admin-auth"
+import { logAdminAccess } from "@/lib/log-admin"
 
 export async function GET(
   _req: Request,
   contextPromise: Promise<{ params: { id: string } }>
 ) {
+  const guard = await requireAdminSession()
+  if ("response" in guard) {
+    return guard.response
+  }
+
   const { params } = await contextPromise
+
+  const adminEmail = guard.session.user?.email ?? ""
+  await logAdminAccess(adminEmail, `/api/admin/fan/${params.id}`)
 
   const { data, error } = await supabaseAdmin
     .from("fans")
@@ -22,4 +32,3 @@ export async function GET(
 
   return NextResponse.json({ data }, { status: 200 })
 }
-  

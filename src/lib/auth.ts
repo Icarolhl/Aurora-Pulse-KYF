@@ -3,27 +3,39 @@ import DiscordProvider from 'next-auth/providers/discord'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { type NextAuthOptions, type Session } from 'next-auth'
 import type { JWT } from 'next-auth/jwt'
+import { isAdminEmail } from '@/lib/admin-emails'
 
-type DiscordGuild = {
+type DiscordGuildApi = {
+  id: string
   name: string
+  icon: string | null
 }
 
-const isDiscordGuild = (value: unknown): value is DiscordGuild => {
+const isDiscordGuild = (value: unknown): value is DiscordGuildApi => {
+  if (!value || typeof value !== 'object') return false
+  const candidate = value as {
+    id?: unknown
+    name?: unknown
+    icon?: unknown
+  }
+
   return (
-    typeof value === 'object' &&
-    value !== null &&
-    typeof (value as { name?: unknown }).name === 'string'
+    typeof candidate.id === 'string' &&
+    typeof candidate.name === 'string' &&
+    (candidate.icon === null || typeof candidate.icon === 'string')
   )
 }
 
+export type GuildSummary = Pick<DiscordGuildApi, 'id' | 'name' | 'icon'>
+
 type TokenWithExtras = JWT & {
-  guilds?: string[]
+  guilds?: GuildSummary[]
   role?: string
 }
 
 type SessionWithExtras = Session & {
   user: (Session['user'] & {
-    guilds?: string[]
+    guilds?: GuildSummary[]
     isAdmin?: boolean
   }) | undefined
 }
@@ -78,11 +90,13 @@ export const authOptions: NextAuthOptions = {
             },
           })
           const rawGuilds = await res.json()
-          const guildNames = Array.isArray(rawGuilds)
-            ? rawGuilds.filter(isDiscordGuild).map(guild => guild.name)
+          const guildSummaries: GuildSummary[] = Array.isArray(rawGuilds)
+            ? rawGuilds
+                .filter(isDiscordGuild)
+                .map(({ id, name, icon }) => ({ id, name, icon }))
             : []
 
-          tokenWithExtras.guilds = guildNames
+          tokenWithExtras.guilds = guildSummaries
         } catch (err) {
           console.error('Erro ao buscar guilds do Discord:', err)
         }
@@ -103,13 +117,8 @@ export const authOptions: NextAuthOptions = {
         sessionWithExtras.user.guilds = tokenWithExtras.guilds
       }
 
-      const allowedAdmins = (process.env.ADMIN_EMAILS || '')
-        .split(',')
-        .map(email => email.trim().toLowerCase())
-
       if (sessionWithExtras.user) {
-        const email = (sessionWithExtras.user.email || '').toLowerCase()
-        sessionWithExtras.user.isAdmin = allowedAdmins.includes(email)
+        sessionWithExtras.user.isAdmin = isAdminEmail(sessionWithExtras.user.email)
       }
 
       return sessionWithExtras

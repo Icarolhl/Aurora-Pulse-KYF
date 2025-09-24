@@ -1,13 +1,13 @@
-import { useSession } from "next-auth/react"
+﻿import { useSession } from "next-auth/react"
 
-const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",") || []
+type SessionUser = {
+  isAdmin?: boolean
+}
 
 export function useIsAdmin() {
   const { data: session, status } = useSession()
-  const email = session?.user?.email
-
-  const isAdmin = email ? adminEmails.includes(email) : false
+  const user = session?.user as SessionUser | undefined
+  const isAdmin = Boolean(user?.isAdmin)
 
   return { isAdmin, loading: status === "loading", session }
 }
-

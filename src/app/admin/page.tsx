@@ -14,10 +14,9 @@ type Fan = {
 
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions)
-  const allowed = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || []
-  const email = session?.user?.email
+  const isAdmin = Boolean((session?.user as { isAdmin?: boolean } | undefined)?.isAdmin)
 
-  if (!session || !email || !allowed.includes(email)) {
+  if (!session || !isAdmin) {
     redirect('/403')
   }
 
