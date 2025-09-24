@@ -34,31 +34,42 @@ Aurora Pulse KYF e um prototipo de plataforma Know Your Fan criado para estudos:
 `
 src/
   app/
+    layout.tsx              # Layout global
     page.tsx                # Landing page
-    connect/page.tsx        # Login social
-    register/page.tsx       # Formulario multietapas
-    admin/page.tsx          # Dashboard administrativo (SSR)
-    admin/fan/[id]/page.tsx # Perfil detalhado do fa
+    connect/
+      page.tsx              # Login social
+    register/
+      page.tsx              # Wizard em três etapas
+    admin/
+      page.tsx              # Dashboard administrativo (SSR)
+      fan/
+        [id]/
+          page.tsx          # Perfil detalhado do fã
     api/
-      register/route.ts     # Registro de fas autenticados
-      link/analyze/route.ts # Analise de links (somente admin)
+      register/route.ts     # Registro autenticado de fãs
+      link/analyze/route.ts # Análise de links (somente admin)
       social/guilds/route.ts# Guilds carregadas do Discord
-      admin/fans/route.ts   # Lista de fas (somente admin)
-      admin/fan/[id]/route.ts# Perfil individual (somente admin)
-  components/               # UI compartilhada (StatusPopup, StyledSelect etc.)
-  context/ToastContext.tsx  # Toast provider global
+      admin/
+        fans/route.ts       # Lista de fãs (somente admin)
+        fan/[id]/route.ts   # Perfil individual (somente admin)
+  components/
+    ui/
+      StatusPopup.tsx       # Pop-ups de feedback
+      StyledSelect.tsx      # Select estilizado
+  context/
+    ToastContext.tsx        # Provider de toasts
   features/
-    register/components/    # Etapas do wizard (dados pessoais, perfil, documento)
+    register/components/    # Etapas do formulário (dados, perfil, documento)
     admin/components/       # FanLinkAnalyzer e widgets do painel
-  hooks/useIsAdmin.ts       # Hook que usa session.user.isAdmin
+  hooks/
+    useIsAdmin.ts           # Hook que usa session.user.isAdmin
   lib/
-    auth.ts                 # Configuracao do NextAuth e enrichment de sessao
-    admin-auth.ts           # Helper para exigir sessao admin nos endpoints
-    admin-emails.ts         # Normaliza lista de e-mails admin via env
-    log-admin.ts            # Registro de auditoria em arquivo temporario
+    auth.ts                 # Configuração do NextAuth e enriquecimento de sessão
+    admin-auth.ts           # Helper para exigir sessão de admin
+    admin-emails.ts         # Normaliza lista de e-mails de admin
+    log-admin.ts            # Registro de auditoria (filesystem temporário)
     ai.ts                   # Chamada ao modelo GPT via OpenRouter
-`
-
+``
 ---
 
 ## Fluxos principais
@@ -73,7 +84,8 @@ src/
   2. Acessa /admin para ver a lista de fas.
   3. Abre /admin/fan/[id] para detalhes, analise de links e dados enriquecidos.
 
-Todos os endpoints pi/admin/* e pi/link/analyze validam a sessao no servidor usando equireAdminSession, garantindo que a Supabase service role key nao seja exposta a usuarios comuns.
+Todos os endpoints pi/admin/* e pi/link/analyze validam a sessao no servidor usando 
+equireAdminSession, garantindo que a Supabase service role key nao seja exposta a usuarios comuns.
 
 ---
 
