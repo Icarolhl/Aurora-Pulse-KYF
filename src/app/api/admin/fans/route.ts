@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { supabaseAdmin } from "@/lib/supabase-admin"
+import { getSupabaseAdmin } from "@/lib/supabase-admin"
 import { requireAdminSession } from "@/lib/admin-auth"
 import { logAdminAccess } from "@/lib/log-admin"
 
@@ -12,7 +12,8 @@ export async function GET() {
   const adminEmail = guard.session.user?.email ?? ""
   await logAdminAccess(adminEmail, "/api/admin/fans")
 
-  const { data, error } = await supabaseAdmin
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
     .from("fans")
     .select("id, nome, email, estado, cidade, created_at")
     .order("created_at", { ascending: false })

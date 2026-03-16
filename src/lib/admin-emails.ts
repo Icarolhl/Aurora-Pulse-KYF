@@ -1,5 +1,7 @@
-﻿const rawAdminEnv =
-  process.env.ADMIN_EMAILS ?? process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? ''
+import 'server-only'
+
+const rawAdminEnv =
+  process.env.ADMIN_EMAILS ?? ''
 
 const adminEmails = rawAdminEnv
   .split(',')

@@ -1,4 +1,4 @@
-﻿export const runtime = "nodejs"
+export const runtime = "nodejs"
 
 import { createClient } from "@supabase/supabase-js"
 import { z } from "zod"
@@ -125,10 +125,35 @@ export async function POST(req: Request) {
     let html: string
 
     try {
-      const response = await fetch(parsedUrl.toString(), {
+      let response = await fetch(parsedUrl.toString(), {
         signal: controller.signal,
-        redirect: "follow"
+        redirect: "manual"
       })
+
+      // Se houver redirecionamento, verificamos o novo host
+      if (response.status >= 300 && response.status < 400) {
+        const location = response.headers.get("location")
+        if (location) {
+          const redirectUrl = new URL(location, parsedUrl.toString())
+          if (isUnsafeHost(redirectUrl.hostname)) {
+            return new Response(
+              JSON.stringify({ error: "Redirecionamento para host não permitido" }),
+              { status: 400 }
+            )
+          }
+          if (redirectUrl.protocol !== "https:") {
+            return new Response(
+              JSON.stringify({ error: "Redirecionamento apenas para HTTPS permitido" }),
+              { status: 400 }
+            )
+          }
+
+          response = await fetch(redirectUrl.toString(), {
+            signal: controller.signal,
+            redirect: "error" // Apenas um nível de redirecionamento para segurança
+          })
+        }
+      }
 
       if (!response.ok) {
         return new Response(

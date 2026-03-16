@@ -7,7 +7,7 @@ export async function middleware(req: NextRequest) {
   if (!isAdminRoute) return NextResponse.next()
 
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  const allowed = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || []
+  const allowed = process.env.ADMIN_EMAILS?.split(',') || []
   const userEmail = token?.email
 
   if (!token || !userEmail || !allowed.includes(userEmail)) {

@@ -1,4 +1,4 @@
-﻿# Aurora Pulse — Know Your Fan
+# Aurora Pulse — Know Your Fan
 
 Aurora Pulse é um prototipo educacional de plataforma Know Your Fan. O projeto coleta dados estruturados dos fãs, valida documentos com OCR e oferece um painel administrativo protegido para analise de engajamento.
 
@@ -56,7 +56,7 @@ Crie um arquivo `.env.local` na raiz do projeto com as variáveis abaixo:
 | `NEXTAUTH_SECRET` | Chave secreta usada pelo NextAuth para assinar tokens. |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Credenciais OAuth do Google. |
 | `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` | Credenciais OAuth do Discord (necessário escopo `identify email guilds`). |
-| `NEXT_PUBLIC_ADMIN_EMAILS` | Lista de e-mails (separados por vírgula) autorizados a acessar o painel admin. |
+| `ADMIN_EMAILS` | Lista de e-mails (separados por vírgula) autorizados a acessar o painel admin. |
 | `ADMIN_USER` / `ADMIN_PASS` | Credenciais opcionais para login administrativo via provider de credenciais. |
 | `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase. |
 | `SUPABASE_ANON_KEY` *(opcional)* | Usada para chamadas client-side, caso necessário. |
@@ -108,7 +108,7 @@ Garanta também permissões adequadas nas Policies do Supabase para bloquear ace
 ## 🔒 Fluxos de autenticação
 
 - Usuários finais acessam `/connect` para autenticar via Google ou Discord.
-- Administradores adicionados em `NEXT_PUBLIC_ADMIN_EMAILS` têm acesso ao painel em `/admin`.
+- Administradores adicionados em `ADMIN_EMAILS` têm acesso ao painel em `/admin`.
 - Opcionalmente, é possível configurar o provider de credenciais (`ADMIN_USER`/`ADMIN_PASS`) para um login administrativo alternativo.
 
 ## 🤖 Análise de links com IA
