@@ -107,11 +107,13 @@ export async function POST(req: Request) {
       )
     }
 
-    const { data: fan, error: fanError } = await supabase
-      .from<Fan>("fans")
+    const { data, error: fanError } = await supabase
+      .from("fans")
       .select("*")
       .eq("id", fanId)
       .single()
+
+    const fan = data as Fan | null
 
     if (fanError || !fan) {
       return new Response(

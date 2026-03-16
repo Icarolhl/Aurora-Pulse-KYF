@@ -1,10 +1,10 @@
-﻿import { getServerSession } from 'next-auth'
+import { getServerSession, type Session } from 'next-auth'
 import { NextResponse } from 'next/server'
 import { authOptions } from '@/lib/auth'
 import { isAdminEmail } from '@/lib/admin-emails'
 
 type AdminSessionResult =
-  | { session: Awaited<ReturnType<typeof getServerSession>> }
+  | { session: Session }
   | { response: NextResponse }
 
 export async function requireAdminSession(): Promise<AdminSessionResult> {
