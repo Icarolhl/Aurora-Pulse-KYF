@@ -124,4 +124,9 @@ export const authOptions: NextAuthOptions = {
       return sessionWithExtras
     },
   },
+
+  pages: {
+    signIn: '/connect',
+    error: '/connect',
+  },
 }

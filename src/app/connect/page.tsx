@@ -1,20 +1,31 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import {
   useSession,
   signIn,
   signOut
 } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { FcGoogle } from 'react-icons/fc'
 import { SiDiscord } from 'react-icons/si'
+import StatusPopup from '@/components/ui/StatusPopup'
 
 export default function ConnectPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [showError, setShowError] = useState(false)
+
   const isAdmin = Boolean((session?.user as { isAdmin?: boolean } | undefined)?.isAdmin)
+
+  useEffect(() => {
+    if (searchParams.get('error')) {
+      setShowError(true)
+    }
+  }, [searchParams])
 
   if (status === 'loading') return null
 
@@ -109,6 +120,18 @@ export default function ConnectPage() {
         backgroundSize: 'cover'
       }}
     >
+      <StatusPopup
+        show={showError}
+        onClose={() => {
+          setShowError(false)
+          router.replace('/connect')
+        }}
+        status="error"
+        message="Um Erro Ocorreu"
+        description="Tente fazer login mais tarde"
+        className="items-start pt-20"
+      />
+
       <div
         className="w-full max-w-md p-8 rounded-2xl shadow-xl
                    backdrop-blur-md bg-white/5 border border-white/10
