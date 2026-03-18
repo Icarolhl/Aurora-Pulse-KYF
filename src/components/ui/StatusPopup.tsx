@@ -11,6 +11,7 @@ type Props = {
   description?: string
   icon?: string
   duration?: number // default: 3000ms
+  className?: string
 }
 
 export default function StatusPopup({
@@ -20,7 +21,8 @@ export default function StatusPopup({
   message,
   description,
   icon,
-  duration = 3000
+  duration = 3000,
+  className
 }: Props) {
   useEffect(() => {
     if (show && onClose) {
@@ -49,7 +51,7 @@ export default function StatusPopup({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      className={`fixed inset-0 z-50 flex justify-center bg-black/50 ${className || 'items-center'}`}
     >
       <div
         className={`max-w-sm w-full rounded-xl p-6 shadow-xl border text-center backdrop-blur-lg
