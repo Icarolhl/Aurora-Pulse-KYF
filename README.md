@@ -2,6 +2,18 @@
 
 Aurora Pulse é uma plataforma Know Your Fan. O projeto coleta dados estruturados dos fãs, valida documentos com OCR e oferece um painel administrativo protegido para analise de engajamento.
 
+## 📸 Visualização
+
+Aqui você pode ver a interface principal da aplicação e o painel de análise:
+
+### Tela Inicial
+![Tela Inicial](public/base.png)
+*Interface de boas-vindas e início do fluxo de engajamento.*
+
+### Dashboard de Análise (Admin)
+![Dashboard de Análise](public/admin_dashboard.png)
+*Painel administrativo com listagem de fãs e ferramentas de análise de relevância com IA.*
+
 ## ✨ Funcionalidades
 
 - **Autenticação social** via Google ou Discord usando NextAuth, com captura automática das guilds do Discord vinculadas ao fã.
