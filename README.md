@@ -50,18 +50,18 @@ src/
 
 Crie um arquivo `.env.local` na raiz do projeto com as variáveis abaixo:
 
-| Variável | Descrição |
-| --- | --- |
-| `NEXTAUTH_URL` | URL base da aplicação (ex.: `http://localhost:3000`). |
-| `NEXTAUTH_SECRET` | Chave secreta usada pelo NextAuth para assinar tokens. |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Credenciais OAuth do Google. |
-| `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` | Credenciais OAuth do Discord (necessário escopo `identify email guilds`). |
-| `ADMIN_EMAILS` | Lista de e-mails (separados por vírgula) autorizados a acessar o painel admin. |
-| `ADMIN_USER` / `ADMIN_PASS` | Credenciais opcionais para login administrativo via provider de credenciais. |
-| `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase. |
-| `SUPABASE_ANON_KEY` *(opcional)* | Usada para chamadas client-side, caso necessário. |
-| `SUPABASE_SERVICE_ROLE_KEY` | Chave Service Role do Supabase (mantida apenas no servidor). |
-| `OPENROUTER_API_KEY` | Chave de acesso à API do OpenRouter. |
+| Variável                                      | Descrição                                                                      |
+| --------------------------------------------- | ------------------------------------------------------------------------------ |
+| `NEXTAUTH_URL`                                | URL base da aplicação (ex.: `http://localhost:3000`).                          |
+| `NEXTAUTH_SECRET`                             | Chave secreta usada pelo NextAuth para assinar tokens.                         |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`   | Credenciais OAuth do Google.                                                   |
+| `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` | Credenciais OAuth do Discord (necessário escopo `identify email guilds`).      |
+| `ADMIN_EMAILS`                                | Lista de e-mails (separados por vírgula) autorizados a acessar o painel admin. |
+| `ADMIN_USER` / `ADMIN_PASS`                   | Credenciais opcionais para login administrativo via provider de credenciais.   |
+| `NEXT_PUBLIC_SUPABASE_URL`                    | URL do projeto Supabase.                                                       |
+| `SUPABASE_ANON_KEY` _(opcional)_              | Usada para chamadas client-side, caso necessário.                              |
+| `SUPABASE_SERVICE_ROLE_KEY`                   | Chave Service Role do Supabase (mantida apenas no servidor).                   |
+| `OPENROUTER_API_KEY`                          | Chave de acesso à API do OpenRouter.                                           |
 
 > **Importante:** mantenha as chaves sensíveis fora do controle de versão. Configure variáveis de ambiente equivalentes em produção.
 
@@ -69,21 +69,21 @@ Crie um arquivo `.env.local` na raiz do projeto com as variáveis abaixo:
 
 O fluxo de registro espera uma tabela `fans` no Supabase com os campos abaixo (adapte conforme suas necessidades):
 
-| Coluna | Tipo sugerido | Observações |
-| --- | --- | --- |
-| `id` | `uuid` (default `gen_random_uuid()`) | Chave primária. |
-| `created_at` | `timestamptz` (default `now()`) | Registro automático. |
-| `nome` | `text` | Nome completo do fã. |
-| `cpf` | `text` (único) | CPF formatado (`000.000.000-00`). |
-| `email` | `text` | Email obtido via OAuth. |
-| `endereco` | `text` | Endereço informado. |
-| `estado` | `text` | Estado selecionado. |
-| `cidade` | `text` | Cidade selecionada. |
-| `interesses` | `text[]` | Lista dinâmica de interesses. |
-| `atividades` | `text[]` | Atividades do fã. |
-| `eventos_participados` | `text[]` | Eventos já frequentados. |
-| `compras_relacionadas` | `text[]` | Histórico de compras relevantes. |
-| `guilds_discord` | `text[]` | Guilds retornadas pela API do Discord. |
+| Coluna                 | Tipo sugerido                        | Observações                            |
+| ---------------------- | ------------------------------------ | -------------------------------------- |
+| `id`                   | `uuid` (default `gen_random_uuid()`) | Chave primária.                        |
+| `created_at`           | `timestamptz` (default `now()`)      | Registro automático.                   |
+| `nome`                 | `text`                               | Nome completo do fã.                   |
+| `cpf`                  | `text` (único)                       | CPF formatado (`000.000.000-00`).      |
+| `email`                | `text`                               | Email obtido via OAuth.                |
+| `endereco`             | `text`                               | Endereço informado.                    |
+| `estado`               | `text`                               | Estado selecionado.                    |
+| `cidade`               | `text`                               | Cidade selecionada.                    |
+| `interesses`           | `text[]`                             | Lista dinâmica de interesses.          |
+| `atividades`           | `text[]`                             | Atividades do fã.                      |
+| `eventos_participados` | `text[]`                             | Eventos já frequentados.               |
+| `compras_relacionadas` | `text[]`                             | Histórico de compras relevantes.       |
+| `guilds_discord`       | `text[]`                             | Guilds retornadas pela API do Discord. |
 
 Garanta também permissões adequadas nas Policies do Supabase para bloquear acesso anônimo e permitir escrita apenas via Service Role.
 
@@ -130,6 +130,6 @@ npm run lint
 
 ## 📄 Avisos
 
-- Projeto para fins educacionais; revise segurança, testes e custos antes de usar em produção.
+- Revise segurança, testes e custos antes de usar em produção.
 - Substitua todas as credenciais e chaves de API.
 - Aurora Pulse é uma marca ficticia criada apenas para demonstração
