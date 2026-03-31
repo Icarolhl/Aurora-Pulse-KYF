@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import { motion } from 'framer-motion'
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function LandingPage() {
   return (
@@ -12,20 +12,20 @@ export default function LandingPage() {
       className="min-h-screen flex flex-col items-center justify-center
                  text-center px-4 text-white"
       style={{
-        backgroundColor: '#0f0f0f',
+        backgroundColor: "#0f0f0f",
         backgroundImage: `radial-gradient(
           circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 40%
         ),
         radial-gradient(
           circle at 80% 70%, rgba(236, 72, 153, 0.12) 0%, transparent 40%
         )`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
       }}
     >
       <div className="mb-10">
         <Image
-          src="/aurora-pulse-logo.svg"
+          src="/aurora-pulse-logo.png"
           alt="Logo Aurora Pulse"
           width={128}
           height={128}
@@ -40,8 +40,8 @@ export default function LandingPage() {
       </h1>
 
       <p className="text-zinc-300 max-w-xl text-lg leading-relaxed mb-8">
-        Plataforma oficial da Aurora Pulse para entender fãs por meio de inteligência
-        artificial, OCR e autenticação social.
+        Plataforma oficial da Aurora Pulse para entender fãs por meio de
+        inteligência artificial, OCR e autenticação social.
       </p>
 
       <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -72,5 +72,5 @@ export default function LandingPage() {
         </motion.a>
       </div>
     </motion.main>
-  )
+  );
 }
