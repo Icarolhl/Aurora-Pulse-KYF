@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import {
   useSession,
   signIn,
@@ -13,7 +13,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { SiDiscord } from 'react-icons/si'
 import StatusPopup from '@/components/ui/StatusPopup'
 
-export default function ConnectPage() {
+function ConnectContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -172,5 +172,13 @@ export default function ConnectPage() {
         </div>
       </div>
     </motion.main>
+  )
+}
+
+export default function ConnectPage() {
+  return (
+    <Suspense fallback={null}>
+      <ConnectContent />
+    </Suspense>
   )
 }
