@@ -1,6 +1,6 @@
 # Aurora Pulse — Know Your Fan
 
-Aurora Pulse é um prototipo educacional de plataforma Know Your Fan. O projeto coleta dados estruturados dos fãs, valida documentos com OCR e oferece um painel administrativo protegido para analise de engajamento.
+Aurora Pulse é uma plataforma Know Your Fan. O projeto coleta dados estruturados dos fãs, valida documentos com OCR e oferece um painel administrativo protegido para analise de engajamento.
 
 ## ✨ Funcionalidades
 
